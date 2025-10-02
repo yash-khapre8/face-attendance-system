@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>iCloudEMS Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #308cfb;
+      --btn-blue: #2969f0;
+      --background: #f7f9fb;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Montserrat', sans-serif; }
+    body, html { height: 100%; width: 100%; }
+    body { background: #eee; min-height: 100vh; }
+    .container { display: flex; height: 100vh; overflow: hidden; }
+    .left-panel {
+      flex: 1.3;
+      background: rgba(48, 140, 251, 0.05);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 0 60px;
+      position: relative;
+      min-width: 430px;
+      background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=900&q=80');
+      background-size: cover;
+      background-position: center;
+    }
+    .overlay { position: absolute;top:0;left:0;width:100%;height:100%;
+      background: rgba(40,60,100,0.3); z-index: 0; }
+    .left-content { position: relative; z-index: 1; }
+    .logo { display: flex;align-items: center; margin-bottom: 32px; }
+    .logo img { width: 55px; margin-right: 15px; }
+    .logo-title { font-size: 2.2rem; font-weight: 700; color: #fff; }
+    .headline { font-size: 2rem; color: #fff; font-weight: 600; margin-bottom: 18px; }
+    .subtext { font-size: 1.05rem; color: #fff; margin-bottom: 100px; max-width: 480px; opacity: 0.92; }
+    .footer {
+      position: absolute;
+      left: 60px;
+      bottom: 24px;
+      font-size: 0.85rem;
+      color: #eee;
+      opacity: 0.9;
+      z-index: 1;
+    }
+
+    /* RIGHT PANEL */
+    .right-panel {
+      flex: 1;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 410px;
+      position: relative;
+    }
+    .login-card {
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 8px 18px 0 rgba(70,90,130,0.13);
+      padding: 46px 32px 34px 32px;
+      width: 370px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .itm-logo { width: 80px; margin-bottom: 15px; display: block; }
+    .login-fields { width: 100%; margin-bottom: 18px; }
+    .login-fields label { font-size: 0.99rem; color: #222; padding-bottom: 3px; display: block; }
+    .login-fields input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #d3d6dd;
+      border-radius: 5px;
+      margin-bottom: 15px;
+      background: #f7f9fb;
+      font-size: 1rem;
+    }
+    .forgot-pw { width: 100%; text-align: right; font-size: 0.93rem; margin-bottom: 14px; }
+    .forgot-pw a { color: var(--primary); text-decoration: none; transition: color 0.17s; }
+    .login-btn { width: 100%; display: flex; justify-content: center; }
+    .login-btn button {
+      width: 100%;
+      padding: 10px 0;
+      background: var(--btn-blue);
+      color: #fff;
+      font-weight: 600;
+      border: none;
+      border-radius: 5px;
+      font-size: 1.08rem;
+      margin-bottom: 22px;
+      cursor: pointer;
+      transition: background .18s;
+    }
+    .google-btn {
+      width: 100%;
+      background: #fff;
+      color: #252525;
+      border: 1.1px solid #d7d7d7;
+      border-radius: 5px;
+      padding: 12px 0;
+      margin-bottom: 13px;
+      font-weight: 500;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 6px 0 rgba(140,140,140,0.10);
+      transition: border .17s;
+    }
+    .google-btn img { width: 20px; margin-right: 7px; }
+    .keycloak-btn, .admin-btn {
+      width: 100%;
+      background: #f7f7f7;
+      color: #222;
+      border: 1px solid #e5e5e5;
+      border-radius: 5px;
+      padding: 12px 0;
+      margin-bottom: 13px;
+      font-weight: 500;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .admin-btn {
+      background: #ebf2fa;
+      border: 1.5px solid #308cfb;
+      color: #28497b;
+      font-weight: 600;
+    }
+    .admin-btn img {
+      width:22px; margin-right:7px;
+    }
+    @media (max-width: 880px) {
+      .container { flex-direction: column; }
+      .left-panel, .right-panel { min-width: 100vw; width: 100vw;}
+      .left-panel, .right-panel { min-height: 320px; height: auto;}
+      .footer { left: 30px;}
+      .login-card { margin-top: 40px; }
+    }
+  </style>
+
+  <!-- Add these scripts in your HTML <head> -->
+<script src="https://www.gstatic.com/firebasejs/10.1.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.1.0/firebase-auth-compat.js"></script>
+
+</head>
+<body>
+<div class="container">
+
+  <div class="left-panel">
+    <div class="overlay"></div>
+    <div class="left-content">
+      <div class="logo">
+        <img src="https://img.icons8.com/ios-filled/100/ffffff/cloud.png" alt="EMS"/>
+        <span class="logo-title">iCloudEMS</span>
+      </div>
+      <div class="headline">Powering student-centric education in universities &amp; colleges</div>
+      <div class="subtext">
+        We help universities and colleges of all sizes and streams run better – from admissions to academics, back office to accreditations, desktop to mobiles – We empower students, faculty and management to collaborate efficiently and use insights effectively, benchmarking quality education while creating personalized learning experience
+      </div>
+    </div>
+    <div class="footer">
+      A market leader in end-to-end unified education management solutions <br>
+      2025 © All rights reserved & Privacy Policy
+    </div>
+  </div>
+
+  <div class="right-panel">
+    <form class="login-card">
+      <img src="https://res.cloudinary.com/dpqz3pwnn/image/upload/v1690036840/itm-logo-black-1_l2v28j.png" alt="ITM Logo" class="itm-logo"/>
+      <div class="login-fields">
+        <label for="loginId">Login Id</label>
+        <input type="text" id="loginId" >
+        <label for="password">Password</label>
+        <input type="password" id="password" >
+      </div>
+      <div class="forgot-pw">
+        <a href="#">Forgot password?</a>
+      </div>
+      <div class="login-btn">
+        <button type="submit">LOGIN &#8594;</button>
+      </div>
+      <div class="google-btn" id="googleLoginBtn">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThtDY3lQL0z3nfknrcD16ZxHe9BGCj-MlTGQ&s" alt="Google Logo" />
+        Sign in with Google
+      </div>
+      <div class="keycloak-btn">Keycloak Login</div>
+      <div class="admin-btn">
+        <img src="https://img.icons8.com/external-flatart-icons-outline-flatarticons/64/308cfb/external-admin-user-mobile-app-development-flatart-icons-outline-flatarticons.png" alt=""/>
+        Admin/Common User Login
+      </div>
+    </form>
+  </div>
+
+</div>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyDkxjzMaUH6bsaa5xrGm0CSDLU1i1YveeA",
+    authDomain: "attendanceproject-7f55e.firebaseapp.com",
+    projectId: "attendanceproject-7f55e",
+    storageBucket: "attendanceproject-7f55e.firebasestorage.app",
+    messagingSenderId: "808110934323",
+    appId: "1:808110934323:web:c3cec682d6ce34d22d5646"
+  };
+
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+
+  document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById("googleLoginBtn").onclick = function(e){
+      e.preventDefault();
+      var provider = new firebase.auth.GoogleAuthProvider();
+      firebase.auth().signInWithPopup(provider).then(function(result){
+        var user = result.user;
+        alert("Hello " + user.displayName);
+        // Optionally redirect or close popup here
+      }).catch(function(error){
+        alert("Login failed: " + error.message);
+      });
+    };
+  });
+</script>
+
+
+</body>
+</html>

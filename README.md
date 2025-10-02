@@ -2,14 +2,6 @@
 
 Face attendance system using face recognition with Python !
 
-## Face attendance software
-
-
-
-
-
-
-## execution
 
 - Python 3.8
 
